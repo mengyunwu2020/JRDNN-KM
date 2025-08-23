@@ -1,16 +1,146 @@
-# Joint Regularized Deep Neural Network Method for Network Estimation (JRDNN-KM)
 
-## Abstract
-Network estimation is a pivotal component in the analysis of single-cell transcriptomic data,
- offering insights into the complex interactions among genes at single-cell resolution. 
-Our proposed method, JRDNN-KM, utilizes a joint regularized deep neural network combined with Mahalanobis distance-based K-means clustering to estimate multiple networks for various cell subgroups simultaneously. 
-This approach effectively handles unknown cellular heterogeneity, zero-inflation, and complex nonlinear gene relationships.
+# README document for manuscript "Heterogeneous gene network estimation for single-cell transcriptomic data via a joint regularized deep neural network"
 
-**Advanced Handling of Data Characteristics**: Effectively addresses cellular heterogeneity, zero-inflation, and nonlinear gene relationships.
 
-## Installation
-Ensure that you have Python 3.8 installed on your machine. You can install the required packages using the following commands:
+## 1. Data
 
-```bash
-pip install numpy==1.21.2
-pip install torch==1.9.1
+### 1.1 Abstract  
+The single-cell transcriptomic datasets used in this study include five publicly available datasets:  
+- Human lung adenocarcinoma (LUAD) cell lines, derived from three cell lines (HCC827, H1975, H2228) with sequencing data from multiple platforms.  
+- Human peripheral blood mononuclear cells (PBMC), consisting of purified immune cell subtypes (CD56+ natural killer cells, CD19+ B cells, CD4+/CD25+ regulatory T cells).  
+- Mouse embryonic stem cells (mESCs), sequenced under three culture conditions (2i, a2i, lif).  
+- Mouse liver cells from the Mouse Cell Atlas (MCA), including diverse cell types involved in immune regulation and tissue function.  
+- Mouse uterus cells from MCA, containing cell subtypes such as endothelial, glandular, and immune cells.  
+
+These datasets vary in sample size (from 704 to 12,418 cells), gene count (from 6,237 to 15,618 genes), and zero-inflation rates (from 30.77% to 91.12%), enabling comprehensive evaluation of the proposed JRDNN-KM method.  
+
+
+### 1.2 Availability  
+All datasets are publicly available for download via the following links:  
+
+- **LUAD cell lines**: Available at https://github.com/LuyiTian/sc_mixology (Tian et al., 2019).  
+- **PBMC**: Available at https://github.com/10XGenomics/single-cell-3prime-paper (Zheng et al., 2017).  
+- **mESCs**: Available in the ArrayExpress database under accession number E-MTAB-2600 (Kolodziejczyk et al., 2015).  
+- **Mouse liver and uterus cells**: Available at https://figshare.com/articles/dataset/MCA_DGE_Data/5435866/8 (Han et al., 2018).  
+
+
+### 1.3 Description  
+
+#### Human Lung Adenocarcinoma (LUAD) Cell Lines  
+- **Contributors**: Tian, L., Dong, X., Freytag, S., et al.  
+- **Citation**: Tian, L., et al. (2019). Benchmarking single cell RNA-sequencing analysis pipelines using mixture control experiments. *Nature Methods*, 16(6), 479–487.  
+- **File format**: Gene expression matrices (count data), metadata with cell line labels.  
+- **Preprocessing**:  
+  - Cells expressing fewer than 500 genes and genes expressed in fewer than 100 cells were removed.  
+  - Batch effect correction was performed using MNN (Haghverdi et al., 2018).  
+  - Library size normalization was applied using total count normalization (TC) (Cole et al., 2019).  
+  - 100 highly variable genes (HVGs) were selected using the variance stabilizing transformation (vst) method in the Seurat R package (Hafemeister & Satija, 2019).  
+
+
+#### Human Peripheral Blood Mononuclear Cells (PBMC)  
+- **Contributors**: Zheng, G. X., Terry, J. M., Belgrader, P., et al.  
+- **Citation**: Zheng, G. X., et al. (2017). Massively parallel digital transcriptional profiling of single cells. *Nature Communications*, 8(1), 14049.  
+- **File format**: Filtered barcode matrix (HDF5), spatial metadata, and cell type annotations.  
+- **Preprocessing**:  
+  - Focused on three cell types: CD56+ natural killer cells, CD19+ B cells, and CD4+/CD25+ regulatory T cells.  
+  - Quality control: Cells with <500 expressed genes and genes with <100 expressing cells were filtered out.  
+  - Normalization and batch correction as described for LUAD, followed by selection of 100 HVGs.  
+
+
+#### Mouse Embryonic Stem Cells (mESCs)  
+- **Contributors**: Kolodziejczyk, A. A., Kim, J. K., Tsang, J. C., et al.  
+- **Citation**: Kolodziejczyk, A. A., et al. (2015). Single cell RNA-sequencing of pluripotent states unlocks modular transcriptional variation. *Cell Stem Cell*, 17(4), 471–485.  
+- **File format**: Gene expression matrices, metadata with culture condition labels (2i, a2i, lif).  
+- **Preprocessing**:  
+  - Quality control filters: Cells with <500 expressed genes and genes with <100 expressing cells were excluded.  
+  - Normalized using Seurat’s `LogNormalize` and batch-corrected with MNN.  
+  - 100 HVGs were selected using vst.  
+
+
+#### Mouse Liver Cells (MCA)  
+- **Contributors**: Han, X., Wang, R., Zhou, Y., et al.  
+- **Citation**: Han, X., et al. (2018). Mapping the mouse cell atlas by microwell-seq. *Cell*, 172(5), 1091–1107.  
+- **File format**: DGE (digital gene expression) matrices, cell type annotations.  
+- **Preprocessing**:  
+  - Cell types representing <5% of the total population were excluded, resulting in 5 cell subgroups.  
+  - Quality control and normalization steps identical to above, with 100 HVGs selected.  
+
+
+#### Mouse Uterus Cells (MCA)  
+- **Contributors**: Han, X., Wang, R., Zhou, Y., et al.  
+- **Citation**: Han, X., et al. (2018). Mapping the mouse cell atlas by microwell-seq. *Cell*, 172(5), 1091–1107.  
+- **File format**: DGE matrices, cell type annotations (endothelial, glandular, macrophage, etc.).  
+- **Preprocessing**:  
+  - Cell types with <5% representation were excluded, retaining 6 cell subgroups.  
+  - Quality control, normalization, and HVG selection as described for other datasets.  
+
+
+## 2. Code
+
+### 2.1 Abstract  
+All data preprocessing, model implementation (JRDNN-KM), and comparative analyses were performed using R and Python. For detailed code to reproduce these processes including scripts for data preprocessing, the implementation of JRDNN-KM in PyTorch, and comparative analyses with competing methods please refer to the Supplemental material.
+
+### 2.2 Description  
+- **Languages**: R (version 4.2.3) and Python (version 3.8).  
+
+- **R packages** (See details in supplemental material for exact implementation codes):  
+  - Seurat (version 5.0.3) for normalization and HVG selection.  
+  - aricode (version 1.0.0) for ARI calculation.  
+  - ggplot2 (version 3.5.2) for visualization.  
+  - igraph (version 2.1.4) for network community detection.  
+  - Bioconductor packages (SingleCellExperiment, scran) for single-cell data handling.  
+  - Additional R packages: dplyr (1.1.4), readxl (1.4.5.9000), tidyr (1.3.1), patchwork (1.3.0), png (0.1.8), grid (4.3.1), ggpubr (0.6.0), ggraph (2.2.1), gridExtra (2.3), network (1.19.0), ggnet (0.1.0), cowplot (1.1.3), BLGGM (0.99.7), spqn (1.8.0), JGNsc (0.0.0.9000), GENIE3 (1.18.0), CSCORE (0.0.0.9000), SC3 (1.15.1)
+
+- **Python packages** (See details in supplemental material for exact implementation codes):  
+  - PyTorch (version 1.9.1) for JRDNN-KM implementation.  
+  - scanpy (version 1.9.1) for data manipulation.  
+  - locCSN (version 3.10.0)  
+  - numpy (version 1.21.2) and pandas (version 1.4.2) for numerical operations.  
+  - scikit-learn (version 1.0.2) for evaluation metrics (F1 score, recall).  
+  - normalisr (version 1.0.0) 
+
+
+
+### 2.3 Package and Environment Setup  
+
+For the exact codes to install and configure the required packages and environments, please refer to the supplemental material. The key components include:
+
+#### JRDNN-KM  
+The JRDNN-KM implementation details are available in the supplemental material. To set up the environment:
+
+1. Ensure R version 4.2.3 and Python version 3.8 are installed.  
+2. Install R packages using the provided `requirements.R` (detailed in supplemental material) which includes commands like:  
+   ```R
+   install.packages(c("ggplot2", "dplyr", "readxl", "tidyr", "patchwork", "png", "grid", "ggpubr", "igraph", "ggraph", "gridExtra", "network", "ggnet", "cowplot", "BLGGM", "spqn", "JGNsc", "GENIE3", "CSCORE", "Seurat", "SC3"))
+   ```  
+3. Install Python packages using the provided `requirements.txt` (detailed in supplemental material) with commands like:  
+   ```bash
+   pip install numpy==1.21.2 torch==1.9.1 normalisr==1.0.0 locCSN==3.10.0 scanpy==1.9.1 pandas==1.4.2 scikit-learn==1.0.2
+   ```  
+4. For the JRDNN-KM source code and specific installation steps, consult the supplemental material for the GitHub repository link and build instructions.
+
+### 2.4 Instructions for Use  
+All results in the manuscript (simulations and real data analyses) are fully reproducible. The code and data are structured hierarchically to facilitate step-by-step reproduction:  
+
+
+### Directory Structure  
+The core resources are organized under two top-level directories: `Simulations/` and `RealData/`.  
+
+
+#### 1. Simulations  
+Contains all materials for simulation studies, with the following structure:  
+
+| Subdirectory       | Content Description                                                                                                 |  
+|--------------------|----------------------------------------------------------------------------------------------------------------------|  
+| `code/`            | - **R scripts** (network topology generation + figure drawing):<br>  - `generate_SBM.R`: Stochastic Block Model networks<br>  - `generate_scalefree.R`: Scale-free networks<br>  - `generate_starchain.R`: Star-chain hybrid networks<br>  - `Draw_Figure2,3,S4,S5,S6.R`: Plots for main/supplementary simulation figures<br> - **Python scripts** (data simulation + model execution):<br> |
+| `result_data/`     | Organized by simulation scenario:<br>  - `balance/`: Balanced subgroup sizes<br>  - `imbalance/`: Imbalanced subgroup sizes<br>  - `common information/`: Shared network information across subgroups<br>  - `linear/`: Linear gene interactions<br>  - `ablation experiments/`: Method ablation (e.g., removing regularization)<br>  - `high dropout/`: High zero-inflation scenarios<br>  - `signal-noise/`: Varying signal-to-noise ratios<br> Each subfolder contains estimated networks, performance metrics, and intermediate data. |  
+
+
+### 2. RealData  
+Contains materials for real single-cell data analyses, structured as follows to support method reproduction and comparison:  
+
+| Subdirectory          | Content Description                                                                                                 |  
+|-----------------------|----------------------------------------------------------------------------------------------------------------------|  
+| `code/`               | **Figure-specific R scripts** for visualizing real data results. These generate key manuscript figures: <br> - `ARI_draw_Figure4B,S7.R`: ARI plots (Main Fig 4B, Supp Fig 7) <br> - `Graphreal_draw_Figure5,S8,S9.R`: Network structure visualizations (Main Fig 5, Supp Figs 8–9) <br> - `Convergence_draw_Figure1.r`, `Convergence_draw_FigureS2.R`: Model convergence curves (Main Fig 1, Supp Fig 2) <br> - `Upset_draw_FigureS14.R`: Upset plots for cross-method comparison (Supp Fig 14) <br> - `ARI_NML_draw_Figure4A.R`: ARI vs. NML performance plots (Main Fig 4A) <br> - `Network_draw_*.R`: Detailed gene network visualizations (Main Fig 6, Supp Figs 10–13) |  
+| `example_demo_LUAD/`  | **Standalone LUAD demo** for rapid validation, organized to separate methods, integration logic, and data: <br>  - **Proposed Method (JRDNN-KM)**: <br>    - `JRDNN-KM/` directory: Core implementation of the JRDNN-KM method (Python modules, training/inference workflows) for reproducing the proposed gene network estimation approach. <br>  - **Competitor Methods (Multi-Language)**: <br>    - **R scripts**: <br>      - `CSCORE+SPQN.R`: Implements the CSCORE + SPQN competitor method. <br>      - `other_competing_methods.R`: Wrapper for additional competitors (e.g., BLGGM, GENIE3) using R. <br>    - **Python scripts**: <br>      - `locCSN.py`: Implements the locCSN competitor method. <br>      - `Normalisr.py`: Implements the Normalisr competitor method. <br>  - **Integration Logic**: <br>    All method scripts (R/Python) align to a unified workflow: they read the same input data, output comparable result files, and interface with downstream analysis scripts (e.g., `other_competing_methods.R`) to enable cross-method comparisons (e.g., clustering performance, network structure differences). <br>  - **Supporting Data**: <br>    - `luad.csv`/`luad.Rdata`: Preprocessed gene expression matrices for LUAD (two formats to support R/Python workflows), serving as the core input for all methods. <br>    - `label.txt`: Cell type annotation file for validating clustering/subgrouping results (e.g., ARI calculation), ensuring reproducibility of performance metrics. |  
+| `result_data/`        | **Precomputed real data results** for immediate validation: <br>  - `Estimated_networks/`: Inferred gene networks across all datasets. <br>  - `subgroup_results_*.csv`: Subgroup assignments from methods (BLGGM, JRDNN-KM, SC3, Seurat). <br>  - `*.RData`: Intermediate data (cluster centers, loss curves, plotting metrics). <br>  - `Result_ground_truth/`: Ground truth annotations (when available). |  
