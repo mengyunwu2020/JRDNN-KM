@@ -3,36 +3,6 @@
 
 
 
-## RealDemo  
-This directory offers a streamlined, self-contained pipeline to reproduce analysis results (for the LUAD dataset) of the proposed JRDNN-KM method and competing methods, designed for quick validation:  
-
-It includes **input data files** and **method implementation scripts**:  
-- Input data:  
-  - `luad.csv` (preprocessed cell×gene expression matrix) + `label.txt` (ground-truth cell line labels for benchmarking) – a paired set of expression and annotation files;  
-  - `luad.Rdata` – a consolidated R data file containing both the preprocessed cell×gene expression matrix and corresponding cell line labels.  
-- Method implementation scripts:  
-- The `JRDNN-KM` folder houses the core code for the proposed method.  
-- Competing methods are implemented via dedicated scripts: `CSCORE+SPQN.R` (for the CSCORE+SPQN pipeline), `locCSN.py` (for locCSN), `Normalisr.py` (for Normalisr), and `other_competing_methods.R` (a wrapper for additional comparative methods).  
-
-
-
-## Simulation Generate  
-
-This directory contains standalone code to **generate custom simulation frameworks** (network topologies + synthetic single-cell expression data) from scratch, with full control over key simulation parameters:  
-
-| Exact File List | Content Description |
-|-----------------|---------------------|
-| `generate_SBM.R` | Generates synthetic networks based on the Stochastic Block Model (SBM) (a modular network topology with predefined community structures): <br> - Outputs: Adjacency matrices defining gene-gene interaction networks (SBM-based) <br> - Derives cell × gene expression matrices aligned with SBM network topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate  <br>   ✔ Non-linear complexity of gene-gene interactions <br>   ✔ Number of network communities  <br>   ✔ Edge density within/between blocks |
-| `generate_scalefree.R` | Generates scale-free networks (power-law degree distribution, mimicking biological gene networks): <br> - Outputs: Adjacency matrices for scale-free gene networks <br> - Derives cell × gene expression matrices consistent with scale-free topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of gene regulation <br>   ✔ Power-law exponent (degree distribution) <br>   ✔ Total number of genes/nodes |
-| `generate_starchain.R` | Generates star-chain hybrid networks (combining star-shaped hub networks and linear chain sub-networks): <br> - Outputs: Adjacency matrices for hybrid gene networks <br> - Derives cell × gene expression matrices matching hybrid topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of hub-gene regulation <br>   ✔ Proportion of star vs. chain sub-networks <br>   ✔ Number of hub genes |
-
-**Usage Notes**:  
-- All scripts output synthetic data in standard formats (CSV for expression matrices, RData for adjacency matrices) compatible with `Simulations/code/` analysis pipelines.  
-- To generate custom simulation data:  
-  1. Set working directory to `code_and_data/Simulation Generate/`;  
-  2. Modify parameter values (zero-inflation, non-linearity) at the top of the `.R` script;  
-  3. Run the script to output network topologies and expression matrices to a `generated_data/` subdirectory (auto-created).  
-
 
 
 ##  Data
@@ -118,22 +88,61 @@ To further validate the performance of JRDNN-KM under biologically realistic con
 
 
 
-
-
-
 ##  Reproduce the results
-
 
 ###  Abstract  
 The `code_and_data` directory contains all core resources to reproduce results:  
 - `RealData/`: Scripts and results for real single-cell data analyses (including full and subsampling-based robustness validation).  
-- `Simulations/`: Scripts and results for simulation studies.
+- `Simulations/`: Scripts and results for simulation studies.  
+- `Simulation Generate/`: Standalone code to generate custom synthetic single-cell expression data and network topologies (SBM, scale-free, star-chain hybrid networks) with tunable biological parameters.  
+- `RealDemo/`: A streamlined, self-contained pipeline for rapid validation of JRDNN-KM and competing methods on the LUAD dataset (includes preprocessed input data and method implementation scripts).  
 
 Detailed implementation of JRDNN-KM (PyTorch) and comparative methods is provided in the Supplemental material.
 
 
 ###  Instructions for Use  
 All results in the manuscript (simulations and real data analyses) are fully reproducible. The `code_and_data` directory is structured hierarchically to facilitate step-by-step reproduction, with strict path management via the `here` package (**critical**: set the working directory root to `code_and_data` before running any scripts).  
+
+#### Simulation Generate  
+
+This directory contains standalone code to **generate custom simulation frameworks** (network topologies + synthetic single-cell expression data) from scratch, with full control over key simulation parameters:  
+
+| Exact File List | Content Description |
+|-----------------|---------------------|
+| `generate_SBM.R` | Generates synthetic networks based on the Stochastic Block Model (SBM) (a modular network topology with predefined community structures): <br> - Outputs: Adjacency matrices defining gene-gene interaction networks (SBM-based) <br> - Derives cell × gene expression matrices aligned with SBM network topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate  <br>   ✔ Non-linear complexity of gene-gene interactions <br>   ✔ Number of network communities  <br>   ✔ Edge density within/between blocks |
+| `generate_scalefree.R` | Generates scale-free networks (power-law degree distribution, mimicking biological gene networks): <br> - Outputs: Adjacency matrices for scale-free gene networks <br> - Derives cell × gene expression matrices consistent with scale-free topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of gene regulation <br>   ✔ Power-law exponent (degree distribution) <br>   ✔ Total number of genes/nodes |
+| `generate_starchain.R` | Generates star-chain hybrid networks (combining star-shaped hub networks and linear chain sub-networks): <br> - Outputs: Adjacency matrices for hybrid gene networks <br> - Derives cell × gene expression matrices matching hybrid topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of hub-gene regulation <br>   ✔ Proportion of star vs. chain sub-networks <br>   ✔ Number of hub genes |
+
+**Usage Notes**:  
+- All scripts output synthetic data in standard formats (CSV for expression matrices, RData for adjacency matrices) compatible with `Simulations/code/` analysis pipelines.  
+- To generate custom simulation data:  
+  1. Set working directory to `code_and_data/Simulation Generate/`;  
+  2. Modify parameter values (zero-inflation, non-linearity) at the top of the `.R` script;  
+  3. Run the script to output network topologies and expression matrices to a `generated_data/` subdirectory (auto-created).  
+
+#### RealDemo  
+This directory offers a streamlined, self-contained pipeline to reproduce analysis results (for the LUAD dataset) of the proposed JRDNN-KM method and competing methods, designed for quick validation:  
+
+It includes **input data files** and **method implementation scripts**:  
+- Input data:  
+  - `luad.csv` (preprocessed cell×gene expression matrix) + `label.txt` (ground-truth cell line labels for benchmarking) – a paired set of expression and annotation files;  
+  - `luad.Rdata` – a consolidated R data file containing both the preprocessed cell×gene expression matrix and corresponding cell line labels.  
+- Method implementation scripts:  
+- The `JRDNN-KM` folder houses the core code for the proposed method.  
+- Competing methods are implemented via dedicated scripts: `CSCORE+SPQN.R` (for the CSCORE+SPQN pipeline), `locCSN.py` (for locCSN), `Normalisr.py` (for Normalisr), and `other_competing_methods.R` (a wrapper for additional comparative methods).  
+
+
+
+####  Simulations  
+Updated with exact file mappings for simulation studies:  
+
+| Subdirectory | Exact File List | Content Description |
+|--------------|-----------------|---------------------|
+| `code/` | `ComplexGenerative_draw_Figure5.R` | Generates plots for simulation results under complex generative mechanisms (main Figure 5) |
+|          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
+| `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
+|               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
+
 
 
 ####  RealData
@@ -167,15 +176,6 @@ Used for subsampling-based robustness validation (50 subsamples per dataset to e
 |               | `Network estimation/` (directory) | Subsampling results for network inference (edge consistency, modularity stability, edge weight variability) across 5 real datasets |
 
 
-####  Simulations  
-Updated with exact file mappings for simulation studies:  
-
-| Subdirectory | Exact File List | Content Description |
-|--------------|-----------------|---------------------|
-| `code/` | `ComplexGenerative_draw_Figure5.R` | Generates plots for simulation results under complex generative mechanisms (main Figure 5) |
-|          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
-| `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
-|               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
 
 
 
