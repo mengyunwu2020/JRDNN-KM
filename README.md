@@ -157,12 +157,14 @@ This directory contains standalone code to **generate custom simulation framewor
 
 
 
-
 #### 2. RealDemo  
-
 This directory offers a streamlined, self-contained pipeline to reproduce analysis results (for the LUAD dataset) of the proposed JRDNN-KM method and competing methods, designed for quick validation:  
 
-It includes **input data files** (`luad.csv`, `luad.Rdata`—preprocessed cell×gene expression matrices in dual formats; `label.txt`—ground-truth cell line labels for benchmarking) and **method implementation scripts**:  
+It includes **input data files** and **method implementation scripts**:  
+- Input data:  
+  - `luad.csv` (preprocessed cell×gene expression matrix) + `label.txt` (ground-truth cell line labels for benchmarking) – a paired set of expression and annotation files;  
+  - `luad.Rdata` – a consolidated R data file containing both the preprocessed cell×gene expression matrix and corresponding cell line labels.  
+- Method implementation scripts:  
 - The `JRDNN-KM` folder houses the core code for the proposed method.  
 - Competing methods are implemented via dedicated scripts: `CSCORE+SPQN.R` (for the CSCORE+SPQN pipeline), `locCSN.py` (for locCSN), `Normalisr.py` (for Normalisr), and `other_competing_methods.R` (a wrapper for additional comparative methods).  
 
@@ -207,6 +209,7 @@ Updated with exact file mappings for simulation studies:
 |          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
 | `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
 |               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
+
 
 
 
