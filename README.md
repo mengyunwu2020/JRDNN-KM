@@ -77,10 +77,11 @@ All datasets are publicly available for download via the following links:
 
 ### 2.1 Abstract  
 All data preprocessing, model implementation (JRDNN-KM), and comparative analyses were performed using R and Python. The `code_and_data` directory contains all core resources to reproduce results:  
-- `RealData/`: Scripts and results for real single-cell data analyses (including full and subsampling-based robustness validation).  
-- `Simulations/`: Scripts and results for simulation studies.  
 - `Simulation Generate/`: Code to generate the simulation framework (network topologies, synthetic data).  
 - `RealDemo/`: A streamlined demo for applying JRDNN-KM to real data (e.g., LUAD) for rapid validation.  
+- `RealData/`: Scripts and results for real single-cell data analyses (including full and subsampling-based robustness validation).  
+- `Simulations/`: Scripts and results for simulation studies.  
+
 
 Detailed implementation of JRDNN-KM (PyTorch) and comparative methods is provided in the Supplemental material.
 
@@ -158,7 +159,12 @@ This directory contains standalone code to **generate custom simulation framewor
 
 
 #### 2. RealDemo  
-(Details to be added)  
+
+This directory offers a streamlined, self-contained pipeline to reproduce analysis results (for the LUAD dataset) of the proposed JRDNN-KM method and competing methods, designed for quick validation:  
+
+It includes **input data files** (`luad.csv`, `luad.Rdata`—preprocessed cell×gene expression matrices in dual formats; `label.txt`—ground-truth cell line labels for benchmarking) and **method implementation scripts**:  
+- The `JRDNN-KM` folder houses the core code for the proposed method.  
+- Competing methods are implemented via dedicated scripts: `CSCORE+SPQN.R` (for the CSCORE+SPQN pipeline), `locCSN.py` (for locCSN), `Normalisr.py` (for Normalisr), and `other_competing_methods.R` (a wrapper for additional comparative methods).  
 
 
 #### 3. RealData
@@ -201,6 +207,7 @@ Updated with exact file mappings for simulation studies:
 |          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
 | `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
 |               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
+
 
 
 
