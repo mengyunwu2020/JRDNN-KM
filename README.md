@@ -92,16 +92,15 @@ To further validate the performance of JRDNN-KM under biologically realistic con
 
 ###  Abstract  
 The `code_and_data` directory contains all core resources to reproduce results:  
-- `RealData/`: Scripts and results for real single-cell data analyses (including full and subsampling-based robustness validation).  
-- `Simulations/`: Scripts and results for simulation studies.  
 - `Simulation Generate/`: Standalone code to generate custom synthetic single-cell expression data and network topologies (SBM, scale-free, star-chain hybrid networks) with tunable biological parameters.  
 - `RealDemo/`: A streamlined, self-contained pipeline for rapid validation of JRDNN-KM and competing methods on the LUAD dataset (includes preprocessed input data and method implementation scripts).  
+- `Simulations/`: Scripts and results for simulation studies.  
+- `RealData/`: Scripts and results for real single-cell data analyses (including full and subsampling-based robustness validation).  
 
-Detailed implementation of JRDNN-KM (PyTorch) and comparative methods is provided in the Supplemental material.
 
 
 ###  Instructions for Use  
-All results in the manuscript (simulations and real data analyses) are fully reproducible. The `code_and_data` directory is structured hierarchically to facilitate step-by-step reproduction, with strict path management via the `here` package (**critical**: set the working directory root to `code_and_data` before running any scripts).  
+All results in the manuscript (simulations and real data analyses) are fully reproducible. The `code_and_data` directory is structured hierarchically to facilitate step-by-step reproduction, with strict path management via the `here` package (**critical: set the working directory root to `code_and_data` before running any scripts**).  
 
 #### Simulation Generate  
 
@@ -113,12 +112,9 @@ This directory contains standalone code to **generate custom simulation framewor
 | `generate_scalefree.R` | Generates scale-free networks (power-law degree distribution, mimicking biological gene networks): <br> - Outputs: Adjacency matrices for scale-free gene networks <br> - Derives cell × gene expression matrices consistent with scale-free topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of gene regulation <br>   ✔ Power-law exponent (degree distribution) <br>   ✔ Total number of genes/nodes |
 | `generate_starchain.R` | Generates star-chain hybrid networks (combining star-shaped hub networks and linear chain sub-networks): <br> - Outputs: Adjacency matrices for hybrid gene networks <br> - Derives cell × gene expression matrices matching hybrid topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of hub-gene regulation <br>   ✔ Proportion of star vs. chain sub-networks <br>   ✔ Number of hub genes |
 
-**Usage Notes**:  
-- All scripts output synthetic data in standard formats (CSV for expression matrices, RData for adjacency matrices) compatible with `Simulations/code/` analysis pipelines.  
-- To generate custom simulation data:  
+ To generate custom simulation data:  
   1. Set working directory to `code_and_data/Simulation Generate/`;  
   2. Modify parameter values (zero-inflation, non-linearity) at the top of the `.R` script;  
-  3. Run the script to output network topologies and expression matrices to a `generated_data/` subdirectory (auto-created).  
 
 #### RealDemo  
 This directory offers a streamlined, self-contained pipeline to reproduce analysis results (for the LUAD dataset) of the proposed JRDNN-KM method and competing methods, designed for quick validation:  
@@ -174,6 +170,7 @@ Used for subsampling-based robustness validation (50 subsamples per dataset to e
 | `code/` | `sub-sample_draw_FigureS18-S21.R` | Generates robustness plots (ARI/NMI distributions across subsamples) for Supplementary Figures S18–S21 |
 | `result_data/` | `Cluster/` (directory) | Subsampling results for clustering performance (ARI/NMI scores, cluster consistency metrics) across 5 real datasets |
 |               | `Network estimation/` (directory) | Subsampling results for network inference (edge consistency, modularity stability, edge weight variability) across 5 real datasets |
+
 
 
 
