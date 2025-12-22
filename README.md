@@ -125,46 +125,15 @@ To further validate the performance of JRDNN-KM under biologically realistic con
 
 
 ###  Abstract  
-All data preprocessing, model implementation (JRDNN-KM), and comparative analyses were performed using R and Python. The `code_and_data` directory contains all core resources to reproduce results:  
-- `Simulation Generate/`: Code to generate the simulation framework (network topologies, synthetic data).  
-- `RealDemo/`: A streamlined demo for applying JRDNN-KM to real data (e.g., LUAD) for rapid validation.  
+The `code_and_data` directory contains all core resources to reproduce results:  
 - `RealData/`: Scripts and results for real single-cell data analyses (including full and subsampling-based robustness validation).  
-- `Simulations/`: Scripts and results for simulation studies.  
-
-
+- `Simulations/`: Scripts and results for simulation studies.
+- 
 Detailed implementation of JRDNN-KM (PyTorch) and comparative methods is provided in the Supplemental material.
-
-###  Description  
-- **Languages**: R (version 4.2.3) and Python (version 3.8).  
-
-- **R packages** (See details in supplemental material for exact implementation codes):  
-  - Seurat (version 5.0.3) for normalization and HVG selection.  
-  - aricode (version 1.0.0) for ARI calculation.  
-  - ggplot2 (version 3.5.2) for visualization.  
-  - igraph (version 2.1.4) for network community detection.  
-  - Bioconductor packages (SingleCellExperiment, scran) for single-cell data handling.  
-  - Additional R packages: dplyr (1.1.4), readxl (1.4.5.9000), tidyr (1.3.1), patchwork (1.3.0), png (0.1.8), grid (4.3.1), ggpubr (0.6.0), ggraph (2.2.1), gridExtra (2.3), network (1.19.0), ggnet (0.1.0), cowplot (1.1.3), BLGGM (0.99.7), spqn (1.8.0), JGNsc (0.0.0.9000), GENIE3 (1.18.0), CSCORE (0.0.0.9000), SC3 (1.15.1), **`here` (for path management)**.
-
-- **Python packages** (See details in supplemental material for exact implementation codes):  
-  - PyTorch (version 1.9.1) for JRDNN-KM implementation.  
-  - scanpy (version 1.9.1) for data manipulation.  
-  - locCSN (version 3.10.0)  
-  - numpy (version 1.21.2) and pandas (version 1.4.2) for numerical operations.  
-  - scikit-learn (version 1.0.2) for evaluation metrics (F1 score, recall).  
-  - normalisr (version 1.0.0) 
 
 
 ###  Instructions for Use  
 All results in the manuscript (simulations and real data analyses) are fully reproducible. The `code_and_data` directory is structured hierarchically to facilitate step-by-step reproduction, with strict path management via the `here` package (**critical**: set the working directory root to `code_and_data` before running any scripts).  
-
-
-#### Directory Structure  
-The core resources are organized under four top-level directories in `code_and_data/`:  
-
-| Directory               | Core Purpose                                                                 |  
-|-------------------------|-----------------------------------------------------------------------------|  
-| `RealData/`             | Real single-cell data analysis (full/subsampling results, plotting scripts) |  
-| `Simulations/`          | Simulation study results and plotting scripts                              |  
 
 
 ####  RealData
@@ -207,6 +176,7 @@ Updated with exact file mappings for simulation studies:
 |          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
 | `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
 |               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
+
 
 
 
