@@ -135,9 +135,33 @@ The core resources are organized under four top-level directories in `code_and_d
 | `Simulation Generate/`  | Code to generate simulation frameworks (network topologies, synthetic data) |  
 | `RealDemo/`             | Streamlined demo for applying JRDNN-KM to real data (e.g., LUAD)            |  
 
+#### 1. Simulation Generate  
+
+This directory contains standalone code to **generate custom simulation frameworks** (network topologies + synthetic single-cell expression data) from scratch, with full control over key simulation parameters:  
+
+| Exact File List | Content Description |
+|-----------------|---------------------|
+| `generate_SBM.R` | Generates synthetic networks based on the Stochastic Block Model (SBM) (a modular network topology with predefined community structures): <br> - Outputs: Adjacency matrices defining gene-gene interaction networks (SBM-based) <br> - Derives cell × gene expression matrices aligned with SBM network topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate  <br>   ✔ Non-linear complexity of gene-gene interactions <br>   ✔ Number of network communities  <br>   ✔ Edge density within/between blocks |
+| `generate_scalefree.R` | Generates scale-free networks (power-law degree distribution, mimicking biological gene networks): <br> - Outputs: Adjacency matrices for scale-free gene networks <br> - Derives cell × gene expression matrices consistent with scale-free topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of gene regulation <br>   ✔ Power-law exponent (degree distribution) <br>   ✔ Total number of genes/nodes |
+| `generate_starchain.R` | Generates star-chain hybrid networks (combining star-shaped hub networks and linear chain sub-networks): <br> - Outputs: Adjacency matrices for hybrid gene networks <br> - Derives cell × gene expression matrices matching hybrid topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of hub-gene regulation <br>   ✔ Proportion of star vs. chain sub-networks <br>   ✔ Number of hub genes |
+
+**Usage Notes**:  
+- All scripts output synthetic data in standard formats (CSV for expression matrices, RData for adjacency matrices) compatible with `Simulations/code/` analysis pipelines.  
+- To generate custom simulation data:  
+  1. Set working directory to `code_and_data/Simulation Generate/`;  
+  2. Modify parameter values (zero-inflation, non-linearity) at the top of the `.R` script;  
+  3. Run the script to output network topologies and expression matrices to a `generated_data/` subdirectory (auto-created).  
 
 
-#### 1. RealData
+
+
+
+
+#### 2. RealDemo  
+(Details to be added)  
+
+
+#### 3. RealData
 ##### (1) Total sample  
 This subdirectory contains full-scale analysis results and plotting scripts for real single-cell datasets, with the exact file breakdown as follows:  
 
@@ -180,18 +204,15 @@ Used for subsampling-based robustness validation (50 subsamples per dataset to e
 | `result_data/` | `Cluster/` (directory) | Subsampling results for clustering performance (ARI/NMI scores, cluster consistency metrics) across 5 real datasets |
 |               | `Network estimation/` (directory) | Subsampling results for network inference (edge consistency, modularity stability, edge weight variability) across 5 real datasets |
 
-#### 2. Simulations  
+
+#### 4. Simulations  
 Updated with exact file mappings for simulation studies:  
 
 | Subdirectory | Exact File List | Content Description |
 |--------------|-----------------|---------------------|
-| `code/` | | `ComplexGenerative_draw_Figure5.R` | Generates plots for simulation results under complex generative mechanisms (main Figure 5) |
+| `code/` | `ComplexGenerative_draw_Figure5.R` | Generates plots for simulation results under complex generative mechanisms (main Figure 5) |
 |          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
 | `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
 |               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
+ 
 
-#### 3. RealDemo  
-(Details to be added)  
-
-#### 4. Simulation Generate  
-(Details to be added)  
