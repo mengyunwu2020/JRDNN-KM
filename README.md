@@ -1,13 +1,48 @@
 # README document for manuscript "Heterogeneous gene network estimation for single-cell transcriptomic data via a joint regularized deep neural network"
 
-## 1. Data
 
-### 1.0 Directory Structure Description
+
+
+## RealDemo  
+This directory offers a streamlined, self-contained pipeline to reproduce analysis results (for the LUAD dataset) of the proposed JRDNN-KM method and competing methods, designed for quick validation:  
+
+It includes **input data files** and **method implementation scripts**:  
+- Input data:  
+  - `luad.csv` (preprocessed cell×gene expression matrix) + `label.txt` (ground-truth cell line labels for benchmarking) – a paired set of expression and annotation files;  
+  - `luad.Rdata` – a consolidated R data file containing both the preprocessed cell×gene expression matrix and corresponding cell line labels.  
+- Method implementation scripts:  
+- The `JRDNN-KM` folder houses the core code for the proposed method.  
+- Competing methods are implemented via dedicated scripts: `CSCORE+SPQN.R` (for the CSCORE+SPQN pipeline), `locCSN.py` (for locCSN), `Normalisr.py` (for Normalisr), and `other_competing_methods.R` (a wrapper for additional comparative methods).  
+
+
+
+## Simulation Generate  
+
+This directory contains standalone code to **generate custom simulation frameworks** (network topologies + synthetic single-cell expression data) from scratch, with full control over key simulation parameters:  
+
+| Exact File List | Content Description |
+|-----------------|---------------------|
+| `generate_SBM.R` | Generates synthetic networks based on the Stochastic Block Model (SBM) (a modular network topology with predefined community structures): <br> - Outputs: Adjacency matrices defining gene-gene interaction networks (SBM-based) <br> - Derives cell × gene expression matrices aligned with SBM network topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate  <br>   ✔ Non-linear complexity of gene-gene interactions <br>   ✔ Number of network communities  <br>   ✔ Edge density within/between blocks |
+| `generate_scalefree.R` | Generates scale-free networks (power-law degree distribution, mimicking biological gene networks): <br> - Outputs: Adjacency matrices for scale-free gene networks <br> - Derives cell × gene expression matrices consistent with scale-free topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of gene regulation <br>   ✔ Power-law exponent (degree distribution) <br>   ✔ Total number of genes/nodes |
+| `generate_starchain.R` | Generates star-chain hybrid networks (combining star-shaped hub networks and linear chain sub-networks): <br> - Outputs: Adjacency matrices for hybrid gene networks <br> - Derives cell × gene expression matrices matching hybrid topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of hub-gene regulation <br>   ✔ Proportion of star vs. chain sub-networks <br>   ✔ Number of hub genes |
+
+**Usage Notes**:  
+- All scripts output synthetic data in standard formats (CSV for expression matrices, RData for adjacency matrices) compatible with `Simulations/code/` analysis pipelines.  
+- To generate custom simulation data:  
+  1. Set working directory to `code_and_data/Simulation Generate/`;  
+  2. Modify parameter values (zero-inflation, non-linearity) at the top of the `.R` script;  
+  3. Run the script to output network topologies and expression matrices to a `generated_data/` subdirectory (auto-created).  
+
+
+
+##  Data
+
+###  Directory Structure Description
 The data used in this study is stored in the `data` folder of the repository, which is divided into two core subdirectories:
 - `RealData`: Contains the five publicly available single-cell transcriptomic datasets described below, including preprocessed expression matrices, cell type annotations, and downstream analysis results.
 - `Application-Based Simulation data`: Includes three biologically realistic simulation datasets (GSD, scMultiSim-T3, SERGIO-DS1) derived from real biological networks, used for method benchmarking under controlled conditions.
 
-### 1.1 Abstract
+###  Abstract
 The single-cell transcriptomic datasets used in this study include five publicly available datasets:
 - Human lung adenocarcinoma (LUAD) cell lines, derived from three cell lines (HCC827, H1975, H2228) with sequencing data from multiple platforms.
 - Human peripheral blood mononuclear cells (PBMC), consisting of purified immune cell subtypes (CD56+ natural killer cells, CD19+ B cells, CD4+/CD25+ regulatory T cells).
@@ -17,7 +52,7 @@ The single-cell transcriptomic datasets used in this study include five publicly
 
 These datasets vary in sample size (from 704 to 12,418 cells), gene count (from 6,237 to 15,618 genes), and zero-inflation rates (from 30.77% to 91.12%), enabling comprehensive evaluation of the proposed JRDNN-KM method.
 
-### 1.2 Availability
+###  Availability
 All datasets are publicly available for download via the following links:
 
 - **LUAD cell lines**: Available at https://github.com/LuyiTian/sc_mixology (Tian et al., 2019).
@@ -25,7 +60,7 @@ All datasets are publicly available for download via the following links:
 - **mESCs**: Available in the ArrayExpress database under accession number E-MTAB-2600 (Kolodziejczyk et al., 2015).
 - **Mouse liver and uterus cells**: Available at https://figshare.com/articles/dataset/MCA_DGE_Data/5435866/8 (Han et al., 2018).
 
-### 1.3 Real Dataset Description
+###  Real Dataset Description
 
 #### Human Lung Adenocarcinoma (LUAD) Cell Lines
 - **Contributors**: Tian, L., Dong, X., Freytag, S., et al.
@@ -71,7 +106,7 @@ All datasets are publicly available for download via the following links:
   - Cell types with <5% representation were excluded, retaining 6 cell subgroups.
   - Quality control, normalization, and HVG selection as described for other datasets.
 
-### 1.4 Application-Based Simulation Data Description
+###  Application-Based Simulation Data Description
 To further validate the performance of JRDNN-KM under biologically realistic conditions, we employed three application-based simulation datasets derived from real biological networks, which are stored in the `Application-Based Simulation data` subdirectory. These datasets incorporate practical biological processes and provide a challenging benchmark for network inference and cell subgroup identification algorithms.
 
 | Dataset | Core Characteristics | Citation |
@@ -86,9 +121,10 @@ To further validate the performance of JRDNN-KM under biologically realistic con
 
 
 
-## 2. Code
+##  Reproduce the results
 
-### 2.1 Abstract  
+
+###  Abstract  
 All data preprocessing, model implementation (JRDNN-KM), and comparative analyses were performed using R and Python. The `code_and_data` directory contains all core resources to reproduce results:  
 - `Simulation Generate/`: Code to generate the simulation framework (network topologies, synthetic data).  
 - `RealDemo/`: A streamlined demo for applying JRDNN-KM to real data (e.g., LUAD) for rapid validation.  
@@ -98,7 +134,7 @@ All data preprocessing, model implementation (JRDNN-KM), and comparative analyse
 
 Detailed implementation of JRDNN-KM (PyTorch) and comparative methods is provided in the Supplemental material.
 
-### 2.2 Description  
+###  Description  
 - **Languages**: R (version 4.2.3) and Python (version 3.8).  
 
 - **R packages** (See details in supplemental material for exact implementation codes):  
@@ -117,25 +153,8 @@ Detailed implementation of JRDNN-KM (PyTorch) and comparative methods is provide
   - scikit-learn (version 1.0.2) for evaluation metrics (F1 score, recall).  
   - normalisr (version 1.0.0) 
 
-### 2.3 Package and Environment Setup  
 
-For the exact codes to install and configure the required packages and environments, please refer to the supplemental material. The key components include:
-
-#### JRDNN-KM  
-The JRDNN-KM implementation details are available in the supplemental material. To set up the environment:
-
-1. Ensure R version 4.2.3 and Python version 3.8 are installed.  
-2. Install R packages using the provided `requirements.R` (detailed in supplemental material) which includes commands like:  
-   ```R
-   install.packages(c("ggplot2", "dplyr", "readxl", "tidyr", "patchwork", "png", "grid", "ggpubr", "igraph", "ggraph", "gridExtra", "network", "ggnet", "cowplot", "BLGGM", "spqn", "JGNsc", "GENIE3", "CSCORE", "Seurat", "SC3", "here"))
-   ```  
-3. Install Python packages using the provided `requirements.txt` (detailed in supplemental material) with commands like:  
-   ```bash
-   pip install numpy==1.21.2 torch==1.9.1 normalisr==1.0.0 locCSN==3.10.0 scanpy==1.9.1 pandas==1.4.2 scikit-learn==1.0.2
-   ```  
-4. For the JRDNN-KM source code and specific installation steps, consult the supplemental material for the GitHub repository link and build instructions.
-
-### 2.4 Instructions for Use  
+###  Instructions for Use  
 All results in the manuscript (simulations and real data analyses) are fully reproducible. The `code_and_data` directory is structured hierarchically to facilitate step-by-step reproduction, with strict path management via the `here` package (**critical**: set the working directory root to `code_and_data` before running any scripts).  
 
 
@@ -146,44 +165,10 @@ The core resources are organized under four top-level directories in `code_and_d
 |-------------------------|-----------------------------------------------------------------------------|  
 | `RealData/`             | Real single-cell data analysis (full/subsampling results, plotting scripts) |  
 | `Simulations/`          | Simulation study results and plotting scripts                              |  
-| `Simulation Generate/`  | Code to generate simulation frameworks (network topologies, synthetic data) |  
-| `RealDemo/`             | Streamlined demo for applying JRDNN-KM to real data (e.g., LUAD)            |  
-
-#### 1. Simulation Generate  
-
-This directory contains standalone code to **generate custom simulation frameworks** (network topologies + synthetic single-cell expression data) from scratch, with full control over key simulation parameters:  
-
-| Exact File List | Content Description |
-|-----------------|---------------------|
-| `generate_SBM.R` | Generates synthetic networks based on the Stochastic Block Model (SBM) (a modular network topology with predefined community structures): <br> - Outputs: Adjacency matrices defining gene-gene interaction networks (SBM-based) <br> - Derives cell × gene expression matrices aligned with SBM network topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate  <br>   ✔ Non-linear complexity of gene-gene interactions <br>   ✔ Number of network communities  <br>   ✔ Edge density within/between blocks |
-| `generate_scalefree.R` | Generates scale-free networks (power-law degree distribution, mimicking biological gene networks): <br> - Outputs: Adjacency matrices for scale-free gene networks <br> - Derives cell × gene expression matrices consistent with scale-free topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of gene regulation <br>   ✔ Power-law exponent (degree distribution) <br>   ✔ Total number of genes/nodes |
-| `generate_starchain.R` | Generates star-chain hybrid networks (combining star-shaped hub networks and linear chain sub-networks): <br> - Outputs: Adjacency matrices for hybrid gene networks <br> - Derives cell × gene expression matrices matching hybrid topology <br> - Tunable parameters: <br>   ✔ Zero-inflation rate <br>   ✔ Non-linear complexity of hub-gene regulation <br>   ✔ Proportion of star vs. chain sub-networks <br>   ✔ Number of hub genes |
-
-**Usage Notes**:  
-- All scripts output synthetic data in standard formats (CSV for expression matrices, RData for adjacency matrices) compatible with `Simulations/code/` analysis pipelines.  
-- To generate custom simulation data:  
-  1. Set working directory to `code_and_data/Simulation Generate/`;  
-  2. Modify parameter values (zero-inflation, non-linearity) at the top of the `.R` script;  
-  3. Run the script to output network topologies and expression matrices to a `generated_data/` subdirectory (auto-created).  
 
 
-
-
-
-#### 2. RealDemo  
-This directory offers a streamlined, self-contained pipeline to reproduce analysis results (for the LUAD dataset) of the proposed JRDNN-KM method and competing methods, designed for quick validation:  
-
-It includes **input data files** and **method implementation scripts**:  
-- Input data:  
-  - `luad.csv` (preprocessed cell×gene expression matrix) + `label.txt` (ground-truth cell line labels for benchmarking) – a paired set of expression and annotation files;  
-  - `luad.Rdata` – a consolidated R data file containing both the preprocessed cell×gene expression matrix and corresponding cell line labels.  
-- Method implementation scripts:  
-- The `JRDNN-KM` folder houses the core code for the proposed method.  
-- Competing methods are implemented via dedicated scripts: `CSCORE+SPQN.R` (for the CSCORE+SPQN pipeline), `locCSN.py` (for locCSN), `Normalisr.py` (for Normalisr), and `other_competing_methods.R` (a wrapper for additional comparative methods).  
-
-
-#### 3. RealData
-##### (1) Total sample  
+####  RealData
+#####  Total sample  
 This subdirectory contains full-scale analysis results and plotting scripts for real single-cell datasets, with the exact file breakdown as follows:  
 
 | Subdirectory | Exact File List | Content Description |
@@ -203,7 +188,7 @@ This subdirectory contains full-scale analysis results and plotting scripts for 
 **Key Note**: All R scripts in `code/` use the `here` package to reference files in `result_data/` (e.g., `here("RealData", "Total sample", "result_data", "Estimated_networks")`). Ensure the working directory is set to the `code_and_data` root before execution.  
 
 
-##### (2) Sub Sample  
+#####  Sub Sample  
 Used for subsampling-based robustness validation (50 subsamples per dataset to evaluate method stability), with the following structure:  
 
 | Subdirectory | Exact File List | Content Description |
@@ -213,7 +198,7 @@ Used for subsampling-based robustness validation (50 subsamples per dataset to e
 |               | `Network estimation/` (directory) | Subsampling results for network inference (edge consistency, modularity stability, edge weight variability) across 5 real datasets |
 
 
-#### 4. Simulations  
+####  Simulations  
 Updated with exact file mappings for simulation studies:  
 
 | Subdirectory | Exact File List | Content Description |
@@ -222,6 +207,7 @@ Updated with exact file mappings for simulation studies:
 |          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
 | `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
 |               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
+
 
 
 
