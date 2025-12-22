@@ -2,75 +2,89 @@
 
 ## 1. Data
 
-### 1.1 Abstract  
-The single-cell transcriptomic datasets used in this study include five publicly available datasets:  
-- Human lung adenocarcinoma (LUAD) cell lines, derived from three cell lines (HCC827, H1975, H2228) with sequencing data from multiple platforms.  
-- Human peripheral blood mononuclear cells (PBMC), consisting of purified immune cell subtypes (CD56+ natural killer cells, CD19+ B cells, CD4+/CD25+ regulatory T cells).  
-- Mouse embryonic stem cells (mESCs), sequenced under three culture conditions (2i, a2i, lif).  
-- Mouse liver cells from the Mouse Cell Atlas (MCA), including diverse cell types involved in immune regulation and tissue function.  
-- Mouse uterus cells from MCA, containing cell subtypes such as endothelial, glandular, and immune cells.  
+### 1.0 Directory Structure Description
+The data used in this study is stored in the `data` folder of the repository, which is divided into two core subdirectories:
+- `RealData`: Contains the five publicly available single-cell transcriptomic datasets described below, including preprocessed expression matrices, cell type annotations, and downstream analysis results.
+- `Application-Based Simulation data`: Includes three biologically realistic simulation datasets (GSD, scMultiSim-T3, SERGIO-DS1) derived from real biological networks, used for method benchmarking under controlled conditions.
 
-These datasets vary in sample size (from 704 to 12,418 cells), gene count (from 6,237 to 15,618 genes), and zero-inflation rates (from 30.77% to 91.12%), enabling comprehensive evaluation of the proposed JRDNN-KM method.  
+### 1.1 Abstract
+The single-cell transcriptomic datasets used in this study include five publicly available datasets:
+- Human lung adenocarcinoma (LUAD) cell lines, derived from three cell lines (HCC827, H1975, H2228) with sequencing data from multiple platforms.
+- Human peripheral blood mononuclear cells (PBMC), consisting of purified immune cell subtypes (CD56+ natural killer cells, CD19+ B cells, CD4+/CD25+ regulatory T cells).
+- Mouse embryonic stem cells (mESCs), sequenced under three culture conditions (2i, a2i, lif).
+- Mouse liver cells from the Mouse Cell Atlas (MCA), including diverse cell types involved in immune regulation and tissue function.
+- Mouse uterus cells from MCA, containing cell subtypes such as endothelial, glandular, and immune cells.
+
+These datasets vary in sample size (from 704 to 12,418 cells), gene count (from 6,237 to 15,618 genes), and zero-inflation rates (from 30.77% to 91.12%), enabling comprehensive evaluation of the proposed JRDNN-KM method.
+
+### 1.2 Availability
+All datasets are publicly available for download via the following links:
+
+- **LUAD cell lines**: Available at https://github.com/LuyiTian/sc_mixology (Tian et al., 2019).
+- **PBMC**: Available at https://github.com/10XGenomics/single-cell-3prime-paper (Zheng et al., 2017).
+- **mESCs**: Available in the ArrayExpress database under accession number E-MTAB-2600 (Kolodziejczyk et al., 2015).
+- **Mouse liver and uterus cells**: Available at https://figshare.com/articles/dataset/MCA_DGE_Data/5435866/8 (Han et al., 2018).
+
+### 1.3 Real Dataset Description
+
+#### Human Lung Adenocarcinoma (LUAD) Cell Lines
+- **Contributors**: Tian, L., Dong, X., Freytag, S., et al.
+- **Citation**: Tian, L., et al. (2019). Benchmarking single cell RNA-sequencing analysis pipelines using mixture control experiments. *Nature Methods*, 16(6), 479–487.
+- **File format**: Gene expression matrices (count data), metadata with cell line labels.
+- **Preprocessing**:
+  - Cells expressing fewer than 500 genes and genes expressed in fewer than 100 cells were removed.
+  - Batch effect correction was performed using MNN (Haghverdi et al., 2018).
+  - Library size normalization was applied using total count normalization (TC) (Cole et al., 2019).
+  - 100 highly variable genes (HVGs) were selected using the variance stabilizing transformation (vst) method in the Seurat R package (Hafemeister & Satija, 2019).
+
+#### Human Peripheral Blood Mononuclear Cells (PBMC)
+- **Contributors**: Zheng, G. X., Terry, J. M., Belgrader, P., et al.
+- **Citation**: Zheng, G. X., et al. (2017). Massively parallel digital transcriptional profiling of single cells. *Nature Communications*, 8(1), 14049.
+- **File format**: Filtered barcode matrix (HDF5), spatial metadata, and cell type annotations.
+- **Preprocessing**:
+  - Focused on three cell types: CD56+ natural killer cells, CD19+ B cells, and CD4+/CD25+ regulatory T cells.
+  - Quality control: Cells with <500 expressed genes and genes with <100 expressing cells were filtered out.
+  - Normalization and batch correction as described for LUAD, followed by selection of 100 HVGs.
+
+#### Mouse Embryonic Stem Cells (mESCs)
+- **Contributors**: Kolodziejczyk, A. A., Kim, J. K., Tsang, J. C., et al.
+- **Citation**: Kolodziejczyk, A. A., et al. (2015). Single cell RNA-sequencing of pluripotent states unlocks modular transcriptional variation. *Cell Stem Cell*, 17(4), 471–485.
+- **File format**: Gene expression matrices, metadata with culture condition labels (2i, a2i, lif).
+- **Preprocessing**:
+  - Quality control filters: Cells with <500 expressed genes and genes with <100 expressing cells were excluded.
+  - Normalized using Seurat’s `LogNormalize` and batch-corrected with MNN.
+  - 100 HVGs were selected using vst.
+
+#### Mouse Liver Cells (MCA)
+- **Contributors**: Han, X., Wang, R., Zhou, Y., et al.
+- **Citation**: Han, X., et al. (2018). Mapping the mouse cell atlas by microwell-seq. *Cell*, 172(5), 1091–1107.
+- **File format**: DGE (digital gene expression) matrices, cell type annotations.
+- **Preprocessing**:
+  - Cell types representing <5% of the total population were excluded, resulting in 5 cell subgroups.
+  - Quality control and normalization steps identical to above, with 100 HVGs selected.
+
+#### Mouse Uterus Cells (MCA)
+- **Contributors**: Han, X., Wang, R., Zhou, Y., et al.
+- **Citation**: Han, X., et al. (2018). Mapping the mouse cell atlas by microwell-seq. *Cell*, 172(5), 1091–1107.
+- **File format**: DGE matrices, cell type annotations (endothelial, glandular, macrophage, etc.).
+- **Preprocessing**:
+  - Cell types with <5% representation were excluded, retaining 6 cell subgroups.
+  - Quality control, normalization, and HVG selection as described for other datasets.
+
+### 1.4 Application-Based Simulation Data Description
+To further validate the performance of JRDNN-KM under biologically realistic conditions, we employed three application-based simulation datasets derived from real biological networks, which are stored in the `Application-Based Simulation data` subdirectory. These datasets incorporate practical biological processes and provide a challenging benchmark for network inference and cell subgroup identification algorithms.
+
+| Dataset | Core Characteristics | Citation |
+|---------|---------------------|----------|
+| **Gonadal Sex Determination (GSD)** | Based on a Boolean network model of gonadal sex determination, capturing the bipotential differentiation of gonads into male (Sertoli cells) or female (Granulosa cells) cell fates. | Pratapa et al. (2020), *Nature Methods* |
+| **scMultiSim-T3** | Generated by scMultiSim, a multi-modality single-cell data simulator integrating key biological factors including gene regulatory networks (GRNs) and cell-cell interactions (CCIs). | Li et al. (2025), *Nature Methods* |
+| **SERGIO-DS1** | Constructed by the SERGIO simulator based on an *E. coli* derived GRN, simulating single-cell gene expression profiles with realistic biological noise. | Dibaeinia & Sinha (2020), *Cell Systems* |
+
+Performance evaluation on these datasets was conducted using key metrics including ARI, F1 score, Recall, and Precision (summarized in Figure \ref{fig:simu_real}). JRDNN-KM exhibited consistent superiority over comparative methods across all three datasets: it achieved the highest ARI for cell subgroup identification and outperformed alternatives in gene network inference. Notably, the performance of all methods gradually declined from GSD to scMultiSim-T3 to SERGIO-DS1, indicating that SERGIO-DS1 poses the greatest challenge due to its complex biological noise. Even in this scenario, JRDNN-KM maintained its relative advantage—its F1 score lead over the second-best method BLGGM remained stable at ~0.027 (GSD), ~0.027 (scMultiSim-T3), and ~0.024 (SERGIO-DS1). This consistency confirms that the joint learning framework of JRDNN-KM remains robust in complex and noisy biological data environments.
 
 
-### 1.2 Availability  
-All datasets are publicly available for download via the following links:  
-
-- **LUAD cell lines**: Available at https://github.com/LuyiTian/sc_mixology (Tian et al., 2019).  
-- **PBMC**: Available at https://github.com/10XGenomics/single-cell-3prime-paper (Zheng et al., 2017).  
-- **mESCs**: Available in the ArrayExpress database under accession number E-MTAB-2600 (Kolodziejczyk et al., 2015).  
-- **Mouse liver and uterus cells**: Available at https://figshare.com/articles/dataset/MCA_DGE_Data/5435866/8 (Han et al., 2018).  
 
 
-### 1.3 Description  
-
-#### Human Lung Adenocarcinoma (LUAD) Cell Lines  
-- **Contributors**: Tian, L., Dong, X., Freytag, S., et al.  
-- **Citation**: Tian, L., et al. (2019). Benchmarking single cell RNA-sequencing analysis pipelines using mixture control experiments. *Nature Methods*, 16(6), 479–487.  
-- **File format**: Gene expression matrices (count data), metadata with cell line labels.  
-- **Preprocessing**:  
-  - Cells expressing fewer than 500 genes and genes expressed in fewer than 100 cells were removed.  
-  - Batch effect correction was performed using MNN (Haghverdi et al., 2018).  
-  - Library size normalization was applied using total count normalization (TC) (Cole et al., 2019).  
-  - 100 highly variable genes (HVGs) were selected using the variance stabilizing transformation (vst) method in the Seurat R package (Hafemeister & Satija, 2019).  
-
-
-#### Human Peripheral Blood Mononuclear Cells (PBMC)  
-- **Contributors**: Zheng, G. X., Terry, J. M., Belgrader, P., et al.  
-- **Citation**: Zheng, G. X., et al. (2017). Massively parallel digital transcriptional profiling of single cells. *Nature Communications*, 8(1), 14049.  
-- **File format**: Filtered barcode matrix (HDF5), spatial metadata, and cell type annotations.  
-- **Preprocessing**:  
-  - Focused on three cell types: CD56+ natural killer cells, CD19+ B cells, and CD4+/CD25+ regulatory T cells.  
-  - Quality control: Cells with <500 expressed genes and genes with <100 expressing cells were filtered out.  
-  - Normalization and batch correction as described for LUAD, followed by selection of 100 HVGs.  
-
-
-#### Mouse Embryonic Stem Cells (mESCs)  
-- **Contributors**: Kolodziejczyk, A. A., Kim, J. K., Tsang, J. C., et al.  
-- **Citation**: Kolodziejczyk, A. A., et al. (2015). Single cell RNA-sequencing of pluripotent states unlocks modular transcriptional variation. *Cell Stem Cell*, 17(4), 471–485.  
-- **File format**: Gene expression matrices, metadata with culture condition labels (2i, a2i, lif).  
-- **Preprocessing**:  
-  - Quality control filters: Cells with <500 expressed genes and genes with <100 expressing cells were excluded.  
-  - Normalized using Seurat’s `LogNormalize` and batch-corrected with MNN.  
-  - 100 HVGs were selected using vst.  
-
-
-#### Mouse Liver Cells (MCA)  
-- **Contributors**: Han, X., Wang, R., Zhou, Y., et al.  
-- **Citation**: Han, X., et al. (2018). Mapping the mouse cell atlas by microwell-seq. *Cell*, 172(5), 1091–1107.  
-- **File format**: DGE (digital gene expression) matrices, cell type annotations.  
-- **Preprocessing**:  
-  - Cell types representing <5% of the total population were excluded, resulting in 5 cell subgroups.  
-  - Quality control and normalization steps identical to above, with 100 HVGs selected.  
-
-
-#### Mouse Uterus Cells (MCA)  
-- **Contributors**: Han, X., Wang, R., Zhou, Y., et al.  
-- **Citation**: Han, X., et al. (2018). Mapping the mouse cell atlas by microwell-seq. *Cell*, 172(5), 1091–1107.  
-- **File format**: DGE matrices, cell type annotations (endothelial, glandular, macrophage, etc.).  
-- **Preprocessing**:  
-  - Cell types with <5% representation were excluded, retaining 6 cell subgroups.  
-  - Quality control, normalization, and HVG selection as described for other datasets.  
 
 
 ## 2. Code
@@ -209,6 +223,7 @@ Updated with exact file mappings for simulation studies:
 |          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
 | `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
 |               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
+
 
 
 
