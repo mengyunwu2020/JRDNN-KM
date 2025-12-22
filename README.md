@@ -1,6 +1,4 @@
-
 # README document for manuscript "Heterogeneous gene network estimation for single-cell transcriptomic data via a joint regularized deep neural network"
-
 
 ## 1. Data
 
@@ -78,7 +76,13 @@ All datasets are publicly available for download via the following links:
 ## 2. Code
 
 ### 2.1 Abstract  
-All data preprocessing, model implementation (JRDNN-KM), and comparative analyses were performed using R and Python. For detailed code to reproduce these processes including scripts for data preprocessing, the implementation of JRDNN-KM in PyTorch, and comparative analyses with competing methods please refer to the Supplemental material.
+All data preprocessing, model implementation (JRDNN-KM), and comparative analyses were performed using R and Python. The `code_and_data` directory contains all core resources to reproduce results:  
+- `RealData/`: Scripts and results for real single-cell data analyses (including full and subsampling-based robustness validation).  
+- `Simulations/`: Scripts and results for simulation studies.  
+- `Simulation Generate/`: Code to generate the simulation framework (network topologies, synthetic data).  
+- `RealDemo/`: A streamlined demo for applying JRDNN-KM to real data (e.g., LUAD) for rapid validation.  
+
+Detailed implementation of JRDNN-KM (PyTorch) and comparative methods is provided in the Supplemental material.
 
 ### 2.2 Description  
 - **Languages**: R (version 4.2.3) and Python (version 3.8).  
@@ -89,7 +93,7 @@ All data preprocessing, model implementation (JRDNN-KM), and comparative analyse
   - ggplot2 (version 3.5.2) for visualization.  
   - igraph (version 2.1.4) for network community detection.  
   - Bioconductor packages (SingleCellExperiment, scran) for single-cell data handling.  
-  - Additional R packages: dplyr (1.1.4), readxl (1.4.5.9000), tidyr (1.3.1), patchwork (1.3.0), png (0.1.8), grid (4.3.1), ggpubr (0.6.0), ggraph (2.2.1), gridExtra (2.3), network (1.19.0), ggnet (0.1.0), cowplot (1.1.3), BLGGM (0.99.7), spqn (1.8.0), JGNsc (0.0.0.9000), GENIE3 (1.18.0), CSCORE (0.0.0.9000), SC3 (1.15.1)
+  - Additional R packages: dplyr (1.1.4), readxl (1.4.5.9000), tidyr (1.3.1), patchwork (1.3.0), png (0.1.8), grid (4.3.1), ggpubr (0.6.0), ggraph (2.2.1), gridExtra (2.3), network (1.19.0), ggnet (0.1.0), cowplot (1.1.3), BLGGM (0.99.7), spqn (1.8.0), JGNsc (0.0.0.9000), GENIE3 (1.18.0), CSCORE (0.0.0.9000), SC3 (1.15.1), **`here` (for path management)**.
 
 - **Python packages** (See details in supplemental material for exact implementation codes):  
   - PyTorch (version 1.9.1) for JRDNN-KM implementation.  
@@ -98,8 +102,6 @@ All data preprocessing, model implementation (JRDNN-KM), and comparative analyse
   - numpy (version 1.21.2) and pandas (version 1.4.2) for numerical operations.  
   - scikit-learn (version 1.0.2) for evaluation metrics (F1 score, recall).  
   - normalisr (version 1.0.0) 
-
-
 
 ### 2.3 Package and Environment Setup  
 
@@ -111,7 +113,7 @@ The JRDNN-KM implementation details are available in the supplemental material. 
 1. Ensure R version 4.2.3 and Python version 3.8 are installed.  
 2. Install R packages using the provided `requirements.R` (detailed in supplemental material) which includes commands like:  
    ```R
-   install.packages(c("ggplot2", "dplyr", "readxl", "tidyr", "patchwork", "png", "grid", "ggpubr", "igraph", "ggraph", "gridExtra", "network", "ggnet", "cowplot", "BLGGM", "spqn", "JGNsc", "GENIE3", "CSCORE", "Seurat", "SC3"))
+   install.packages(c("ggplot2", "dplyr", "readxl", "tidyr", "patchwork", "png", "grid", "ggpubr", "igraph", "ggraph", "gridExtra", "network", "ggnet", "cowplot", "BLGGM", "spqn", "JGNsc", "GENIE3", "CSCORE", "Seurat", "SC3", "here"))
    ```  
 3. Install Python packages using the provided `requirements.txt` (detailed in supplemental material) with commands like:  
    ```bash
@@ -120,27 +122,76 @@ The JRDNN-KM implementation details are available in the supplemental material. 
 4. For the JRDNN-KM source code and specific installation steps, consult the supplemental material for the GitHub repository link and build instructions.
 
 ### 2.4 Instructions for Use  
-All results in the manuscript (simulations and real data analyses) are fully reproducible. The code and data are structured hierarchically to facilitate step-by-step reproduction:  
+All results in the manuscript (simulations and real data analyses) are fully reproducible. The `code_and_data` directory is structured hierarchically to facilitate step-by-step reproduction, with strict path management via the `here` package (**critical**: set the working directory root to `code_and_data` before running any scripts).  
 
 
-### Directory Structure  
-The core resources are organized under two top-level directories: `Simulations/` and `RealData/`.  
+#### Directory Structure  
+The core resources are organized under four top-level directories in `code_and_data/`:  
+
+| Directory               | Core Purpose                                                                 |  
+|-------------------------|-----------------------------------------------------------------------------|  
+| `RealData/`             | Real single-cell data analysis (full/subsampling results, plotting scripts) |  
+| `Simulations/`          | Simulation study results and plotting scripts                              |  
+| `Simulation Generate/`  | Code to generate simulation frameworks (network topologies, synthetic data) |  
+| `RealDemo/`             | Streamlined demo for applying JRDNN-KM to real data (e.g., LUAD)            |  
 
 
-#### 1. Simulations  
-Contains all materials for simulation studies, with the following structure:  
 
-| Subdirectory       | Content Description                                                                                                 |  
-|--------------------|----------------------------------------------------------------------------------------------------------------------|  
-| `code/`            | - **R scripts** (network topology generation + figure drawing):<br>  - `generate_SBM.R`: Stochastic Block Model networks<br>  - `generate_scalefree.R`: Scale-free networks<br>  - `generate_starchain.R`: Star-chain hybrid networks<br>  - `Draw_Figure2,3,S4,S5,S6.R`: Plots for main/supplementary simulation figures<br> - **Python scripts** (data simulation + model execution):<br> |
-| `result_data/`     | Organized by simulation scenario:<br>  - `balance/`: Balanced subgroup sizes<br>  - `imbalance/`: Imbalanced subgroup sizes<br>  - `common information/`: Shared network information across subgroups<br>  - `linear/`: Linear gene interactions<br>  - `ablation experiments/`: Method ablation (e.g., removing regularization)<br>  - `high dropout/`: High zero-inflation scenarios<br>  - `signal-noise/`: Varying signal-to-noise ratios<br> Each subfolder contains estimated networks, performance metrics, and intermediate data. |  
+#### 1. RealData
+##### (1) Total sample  
+This subdirectory contains full-scale analysis results and plotting scripts for real single-cell datasets, with the exact file breakdown as follows:  
 
+| Subdirectory | Exact File List | Content Description |
+|--------------|-----------------|---------------------|
+| `code/` | `ARI_draw_Figure2B,S4.R` | Generates ARI (Adjusted Rand Index) plots for main Figure 2B and Supplementary Figure S4 |
+|          | `ARI_NMI_draw_Figure2A.R` | Generates ARI vs. NMI (Normalized Mutual Information) performance plots for main Figure 2A |
+|          | `Convergence_draw_FigureS1.r` | Generates model convergence curves for Supplementary Figure S1 |
+|          | `Convergence_draw_FigureS2.R` | Generates model convergence curves for Supplementary Figure S2 |
+|          | `Graphreal_draw_Figure3,S5,S6.R` | Generates network structure visualizations for real datasets (main Figure 3, Supplementary Figures S5–S6) |
+|          | `ModelCheck_FigureS3.R` | Generates model validation/ diagnostic plots for Supplementary Figure S3 |
+|          | `Network_draw_Figure4.R` | Generates detailed gene network visualizations for main Figure 4 |
+|          | `Network_draw_FigureS7.R` | Generates detailed gene network visualizations for Supplementary Figure S7 |
+|          | `Network_draw_FigureS8.R` | Generates detailed gene network visualizations for Supplementary Figure S8 |
+|          | `Network_draw_FigureS9.R` | Generates detailed gene network visualizations for Supplementary Figure S9 |
+|          | `Network_draw_FigureS10.R` | Generates detailed gene network visualizations for Supplementary Figure S10 |
+|          | `Sensitivity_draw_FigureS17.R` | Generates sensitivity analysis plots for Supplementary Figure S17 |
+|          | `Upset_draw_FigureS11.R` | Generates Upset plots for cross-method comparison (Supplementary Figure S11) |
+| `result_data/` | `all_experiments.RData` | Aggregated raw data and metrics from all real-data experiments (e.g., performance scores, network edge weights) |
+|               | `centers_evolution.RData` | Time-series/ iterative data on cluster center evolution during model training (for convergence analysis) |
+|               | `Estimated_networks/` (directory) | Inferred gene-gene interaction networks for all 5 real datasets (LUAD, PBMC, mESCs, mouse liver, mouse uterus), stored as adjacency matrices and edge lists |
+|               | `loss_data.RData` | Model training loss values (training/ validation loss) across epochs for JRDNN-KM and comparative methods |
+|               | `model checking/` (directory) | Model diagnostic results (e.g., residual analysis, parameter stability, convergence diagnostics) |
+|               | `plot_data.RData` | Preprocessed, visualization-ready data (e.g., summarized ARI/NMI scores, network modularity metrics) |
+|               | `Result_ground_truth/` (directory) | Ground-truth annotations (cell type labels, known gene interactions) for benchmarking (where available) |
+|               | `Sensitive/` (directory) | Results of sensitivity analyses (e.g., hyperparameter sweep, subsampling intensity, gene set size) |
+|               | `subgroup_results_BLGGM.csv` | Subgroup/cell type assignment results from the BLGGM method (per-cell labels, cluster IDs) |
+|               | `subgroup_results_JRDNN_KM.csv` | Subgroup/cell type assignment results from the proposed JRDNN-KM method (per-cell labels, cluster IDs) |
+|               | `subgroup_results_SC3.csv` | Subgroup/cell type assignment results from the SC3 method (per-cell labels, cluster IDs) |
+|               | `subgroup_results_Seurat.csv` | Subgroup/cell type assignment results from Seurat (per-cell labels, cluster IDs) |
 
-### 2. RealData  
-Contains materials for real single-cell data analyses, structured as follows to support method reproduction and comparison:  
+**Key Note**: All R scripts in `code/` use the `here` package to reference files in `result_data/` (e.g., `here("RealData", "Total sample", "result_data", "Estimated_networks")`). Ensure the working directory is set to the `code_and_data` root before execution.  
 
-| Subdirectory          | Content Description                                                                                                 |  
-|-----------------------|----------------------------------------------------------------------------------------------------------------------|  
-| `code/`               | **Figure-specific R scripts** for visualizing real data results. These generate key manuscript figures: <br> - `ARI_draw_Figure4B,S7.R`: ARI plots (Main Fig 4B, Supp Fig 7) <br> - `Graphreal_draw_Figure5,S8,S9.R`: Network structure visualizations (Main Fig 5, Supp Figs 8–9) <br> - `Convergence_draw_Figure1.r`, `Convergence_draw_FigureS2.R`: Model convergence curves (Main Fig 1, Supp Fig 2) <br> - `Upset_draw_FigureS14.R`: Upset plots for cross-method comparison (Supp Fig 14) <br> - `ARI_NML_draw_Figure4A.R`: ARI vs. NML performance plots (Main Fig 4A) <br> - `Network_draw_*.R`: Detailed gene network visualizations (Main Fig 6, Supp Figs 10–13) |  
-| `example_demo_LUAD/`  | **Standalone LUAD demo** for rapid validation, organized to separate methods, integration logic, and data: <br>  - **Proposed Method (JRDNN-KM)**: <br>    - `JRDNN-KM/` directory: Core implementation of the JRDNN-KM method (Python modules, training/inference workflows) for reproducing the proposed gene network estimation approach. <br>  - **Competitor Methods (Multi-Language)**: <br>    - **R scripts**: <br>      - `CSCORE+SPQN.R`: Implements the CSCORE + SPQN competitor method. <br>      - `other_competing_methods.R`: Wrapper for additional competitors (e.g., BLGGM, GENIE3) using R. <br>    - **Python scripts**: <br>      - `locCSN.py`: Implements the locCSN competitor method. <br>      - `Normalisr.py`: Implements the Normalisr competitor method. <br>  - **Integration Logic**: <br>    All method scripts (R/Python) align to a unified workflow: they read the same input data, output comparable result files, and interface with downstream analysis scripts (e.g., `other_competing_methods.R`) to enable cross-method comparisons (e.g., clustering performance, network structure differences). <br>  - **Supporting Data**: <br>    - `luad.csv`/`luad.Rdata`: Preprocessed gene expression matrices for LUAD (two formats to support R/Python workflows), serving as the core input for all methods. <br>    - `label.txt`: Cell type annotation file for validating clustering/subgrouping results (e.g., ARI calculation), ensuring reproducibility of performance metrics. |  
-| `result_data/`        | **Precomputed real data results** for immediate validation: <br>  - `Estimated_networks/`: Inferred gene networks across all datasets. <br>  - `subgroup_results_*.csv`: Subgroup assignments from methods (BLGGM, JRDNN-KM, SC3, Seurat). <br>  - `*.RData`: Intermediate data (cluster centers, loss curves, plotting metrics). <br>  - `Result_ground_truth/`: Ground truth annotations (when available). |  
+##### (2) Sub Sample  
+Used for subsampling-based robustness validation (50 subsamples per dataset to evaluate method stability), with the following structure:  
+
+| Subdirectory | Exact File List | Content Description |
+|--------------|-----------------|---------------------|
+| `code/` | `sub-sample_draw_FigureS18-S21.R` | Generates robustness plots (ARI/NMI distributions across subsamples) for Supplementary Figures S18–S21 |
+| `result_data/` | `Cluster/` (directory) | Subsampling results for clustering performance (ARI/NMI scores, cluster consistency metrics) across 5 real datasets |
+|               | `Network estimation/` (directory) | Subsampling results for network inference (edge consistency, modularity stability, edge weight variability) across 5 real datasets |
+
+#### 2. Simulations  
+Updated with exact file mappings for simulation studies:  
+
+| Subdirectory | Exact File List | Content Description |
+|--------------|-----------------|---------------------|
+| `code/` | | `ComplexGenerative_draw_Figure5.R` | Generates plots for simulation results under complex generative mechanisms (main Figure 5) |
+|          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
+| `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
+|               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
+
+#### 3. RealDemo  
+(Details to be added)  
+
+#### 4. Simulation Generate  
+(Details to be added)  
