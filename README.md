@@ -128,7 +128,7 @@ To further validate the performance of JRDNN-KM under biologically realistic con
 The `code_and_data` directory contains all core resources to reproduce results:  
 - `RealData/`: Scripts and results for real single-cell data analyses (including full and subsampling-based robustness validation).  
 - `Simulations/`: Scripts and results for simulation studies.
-- 
+
 Detailed implementation of JRDNN-KM (PyTorch) and comparative methods is provided in the Supplemental material.
 
 
@@ -176,6 +176,7 @@ Updated with exact file mappings for simulation studies:
 |          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
 | `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
 |               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
+
 
 
 
