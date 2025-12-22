@@ -174,26 +174,13 @@ This subdirectory contains full-scale analysis results and plotting scripts for 
 |          | `Graphreal_draw_Figure3,S5,S6.R` | Generates network structure visualizations for real datasets (main Figure 3, Supplementary Figures S5–S6) |
 |          | `ModelCheck_FigureS3.R` | Generates model validation/ diagnostic plots for Supplementary Figure S3 |
 |          | `Network_draw_Figure4.R` | Generates detailed gene network visualizations for main Figure 4 |
-|          | `Network_draw_FigureS7.R` | Generates detailed gene network visualizations for Supplementary Figure S7 |
-|          | `Network_draw_FigureS8.R` | Generates detailed gene network visualizations for Supplementary Figure S8 |
-|          | `Network_draw_FigureS9.R` | Generates detailed gene network visualizations for Supplementary Figure S9 |
-|          | `Network_draw_FigureS10.R` | Generates detailed gene network visualizations for Supplementary Figure S10 |
+|          | `Network_draw_FigureS7.R`- `Network_draw_FigureS10.R`| Generates detailed gene network visualizations for Supplementary Figure S7-S10 |
 |          | `Sensitivity_draw_FigureS17.R` | Generates sensitivity analysis plots for Supplementary Figure S17 |
 |          | `Upset_draw_FigureS11.R` | Generates Upset plots for cross-method comparison (Supplementary Figure S11) |
-| `result_data/` | `all_experiments.RData` | Aggregated raw data and metrics from all real-data experiments (e.g., performance scores, network edge weights) |
-|               | `centers_evolution.RData` | Time-series/ iterative data on cluster center evolution during model training (for convergence analysis) |
-|               | `Estimated_networks/` (directory) | Inferred gene-gene interaction networks for all 5 real datasets (LUAD, PBMC, mESCs, mouse liver, mouse uterus), stored as adjacency matrices and edge lists |
-|               | `loss_data.RData` | Model training loss values (training/ validation loss) across epochs for JRDNN-KM and comparative methods |
-|               | `model checking/` (directory) | Model diagnostic results (e.g., residual analysis, parameter stability, convergence diagnostics) |
-|               | `plot_data.RData` | Preprocessed, visualization-ready data (e.g., summarized ARI/NMI scores, network modularity metrics) |
-|               | `Result_ground_truth/` (directory) | Ground-truth annotations (cell type labels, known gene interactions) for benchmarking (where available) |
-|               | `Sensitive/` (directory) | Results of sensitivity analyses (e.g., hyperparameter sweep, subsampling intensity, gene set size) |
-|               | `subgroup_results_BLGGM.csv` | Subgroup/cell type assignment results from the BLGGM method (per-cell labels, cluster IDs) |
-|               | `subgroup_results_JRDNN_KM.csv` | Subgroup/cell type assignment results from the proposed JRDNN-KM method (per-cell labels, cluster IDs) |
-|               | `subgroup_results_SC3.csv` | Subgroup/cell type assignment results from the SC3 method (per-cell labels, cluster IDs) |
-|               | `subgroup_results_Seurat.csv` | Subgroup/cell type assignment results from Seurat (per-cell labels, cluster IDs) |
+| `result_data/` | `all_experiments.RData`, `centers_evolution.RData`, `Estimated_networks/` (directory), `loss_data.RData`, `model checking/` (directory), `plot_data.RData`, `Result_ground_truth/` (directory), `Sensitive/` (directory), `subgroup_results_BLGGM.csv`, `subgroup_results_JRDNN_KM.csv`, `subgroup_results_SC3.csv`, `subgroup_results_Seurat.csv` | Precomputed results to support plotting scripts in the `code/` directory, including aggregated experiment data, model training metrics, inferred gene networks, subgroup assignment results, and diagnostic data for all 5 real datasets (LUAD, PBMC, mESCs, mouse liver, mouse uterus). |
 
 **Key Note**: All R scripts in `code/` use the `here` package to reference files in `result_data/` (e.g., `here("RealData", "Total sample", "result_data", "Estimated_networks")`). Ensure the working directory is set to the `code_and_data` root before execution.  
+
 
 ##### (2) Sub Sample  
 Used for subsampling-based robustness validation (50 subsamples per dataset to evaluate method stability), with the following structure:  
@@ -214,5 +201,6 @@ Updated with exact file mappings for simulation studies:
 |          | `Simulation_draw_FigureS23-S27.R` | Generates plots for standard simulation scenarios (Supplementary Figures S23–S27) |
 | `result_data/` | `Complex generative mechanisms/` (directory) | Simulation results under complex generative settings (e.g., non-linear gene interactions, dynamic subgroup structures) |
 |               | `simulation result/` (directory) | Results from standard simulation scenarios (balanced/imbalanced subgroups, shared network information, linear interactions, high dropout, signal-noise variation) |
- 
+
+
 
